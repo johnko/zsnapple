@@ -11,7 +11,7 @@ test
            zsnapple -f short -l 365 -r -v tank -p TEST
 ```
 
-crontab at 3:30 am
+crontab at 3:30am daily
 
 ```
 PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin:/root/bin
@@ -26,7 +26,7 @@ test
           zsnapple -f shadow -l 24 -r -v tank/smb -p TEST
 ```
 
-crontab at every hour and 0 minutes
+crontab at 0 minutes hourly
 
 ```
 PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin:/root/bin
