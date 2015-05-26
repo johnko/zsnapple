@@ -26,7 +26,7 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date -u +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=150526-072034
+SCRIPTVERSION=150526-072442
 
 exiterror() {
     exitcode=$1
@@ -60,6 +60,7 @@ listsnapshots() {
 }
 
 cleanupsnaps() {
+	# if limit is not blank, then maybe need to delete snaps
     if [ "x" != "x${LIMIT}" ]; then
         SNAPPATTERN=`snappattern ${FORMAT}`
         if [ "x" != "x${PREFIX}" ]; then
@@ -113,6 +114,10 @@ done
 LIMIT=`echo ${LIMIT} | tr -cd '0-9'`
 PREFIX=`echo ${PREFIX} | tr -cd '[:alnum:]._-'`
 SNAPNAME=`snapformat ${FORMAT}`
+
+if [ "x" == "x${VOLUME}" ]; then
+	exiterror 1 "missing -v VOLUME"
+fi
 
 if [ "x" == "x${SILENT}" ]; then
 echo zfs snapshot ${RECURSIVE} ${VOLUME}@${PREFIX}${SNAPNAME}
