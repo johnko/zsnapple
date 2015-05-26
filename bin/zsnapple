@@ -26,7 +26,9 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date -u +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=150526-073149
+SCRIPTVERSION=150526-084025
+
+SNAPLISTTMP=/tmp/zsnapple.txt
 
 exiterror() {
     exitcode=$1
@@ -55,14 +57,19 @@ snappattern() {
     esac
 }
 
+generatesnapshots() {
+    zfs list -H -t snapshot -o name,creation -s creation | awk '{print $1}' | grep "${VOLUME}@" | grep "${SNAPPATTERN}" >${SNAPLISTTMP}
+}
+
 listsnapshots() {
-    zfs list -H -t snapshot -o name,creation -s creation | awk '{print $1}' | grep "${VOLUME}@" | grep "${SNAPPATTERN}"
+	cat ${SNAPLISTTMP}
 }
 
 cleanupsnaps() {
 	# if limit is not blank, then maybe need to delete snaps
     if [ "x" != "x${LIMIT}" ]; then
         SNAPPATTERN=`snappattern ${FORMAT}`
+        generatesnapshots
         if [ "x" != "x${PREFIX}" ]; then
                 COUNT=`listsnapshots | grep "${PREFIX}" | wc -l`
             TODESTROY=`listsnapshots | grep "${PREFIX}" | head -1`
@@ -74,6 +81,7 @@ cleanupsnaps() {
 
             zfs destroy ${RECURSIVE} ${TODESTROY}
 
+			generatesnapshots
             if [ "x" != "x${PREFIX}" ]; then
                     COUNT=`listsnapshots | grep "${PREFIX}" | wc -l`
                 TODESTROY=`listsnapshots | grep "${PREFIX}" | head -1`
