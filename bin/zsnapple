@@ -26,7 +26,7 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date -u +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=150526-061009
+SCRIPTVERSION=150526-072034
 
 exiterror() {
     exitcode=$1
@@ -41,17 +41,17 @@ snapformat() {
     FORMAT="$1"
     case "${FORMAT}" in
         # short format 2 digit for everything in UTC
-        short) date -u +%y%m%d-%H%M%S
+        short) date -u +%y%m%d-%H%M%S ;;
         # https://www.samba.org/samba/docs/man/manpages/vfs_shadow_copy2.8.html
-        *) TZ=GMT date +GMT-%Y.%m.%d-%H.%M.%S
+        *) TZ=GMT date +GMT-%Y.%m.%d-%H.%M.%S ;;
     esac
 }
 
 snappattern() {
     FORMAT="$1"
     case "${FORMAT}" in
-        short) echo "[0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9]"
-        *) echo "GMT-[0-9][0-9][0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]-[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]"
+        short) echo "[0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9]" ;;
+        *) echo "GMT-[0-9][0-9][0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]-[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]" ;;
     esac
 }
 
