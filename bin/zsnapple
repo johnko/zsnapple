@@ -64,11 +64,11 @@ generatesnapshots() {
         | awk '{print $1}' \
         | grep "^${VOLUME}@" \
         | grep "${SNAPPATTERN}" \
-        >${SNAPLISTTMP}/${VOLUME}.${PREFIX}.${LIMIT}.${FORMAT}.${RECURSIVE}.txt
+        >${SNAPLISTTMP}/${SAFEVOLUME}.${PREFIX}.${LIMIT}.${SAFEFORMAT}.${RECURSIVE}.txt
 }
 
 listsnapshots() {
-	cat ${SNAPLISTTMP}/${VOLUME}.${PREFIX}.${LIMIT}.${FORMAT}.${RECURSIVE}.txt
+	cat ${SNAPLISTTMP}/${SAFEVOLUME}.${PREFIX}.${LIMIT}.${SAFEFORMAT}.${RECURSIVE}.txt
 }
 
 cleanupsnaps() {
@@ -128,6 +128,8 @@ done
 LIMIT=`echo ${LIMIT} | tr -cd '0-9'`
 PREFIX=`echo ${PREFIX} | tr -cd '[:alnum:]._-'`
 SNAPNAME=`snapformat ${FORMAT}`
+SAFEVOLUME=`echo ${VOLUME} | tr -cd '[:alnum:]._-'`
+SAFEFORMAT=`echo ${FORMAT} | tr -cd '[:alnum:]._-'`
 
 if [ "x" == "x${VOLUME}" ]; then
 	exiterror 1 "missing -v VOLUME"
