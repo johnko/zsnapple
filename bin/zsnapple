@@ -62,7 +62,7 @@ generatesnapshots() {
 
     zfs list -H -t snapshot -o name,creation -s creation \
         | awk '{print $1}' \
-        | grep "${VOLUME}@" \
+        | grep "^${VOLUME}@" \
         | grep "${SNAPPATTERN}" \
         >${SNAPLISTTMP}/${VOLUME}.${PREFIX}.${LIMIT}.${FORMAT}.${RECURSIVE}.txt
 }
