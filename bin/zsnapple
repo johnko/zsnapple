@@ -26,7 +26,7 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date -u +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=150527-012622
+SCRIPTVERSION=150527-023436
 
 SNAPLISTTMP=/tmp/zsnapple
 
@@ -133,6 +133,10 @@ SAFEFORMAT=`echo ${FORMAT} | tr -cd '[:alnum:]._-'`
 
 if [ "x" == "x${VOLUME}" ]; then
 	exiterror 1 "missing -v VOLUME"
+fi
+
+if ! zfs list ${VOLUME} >/dev/null 2>/dev/null ; then
+    exiterror 1 "$VOLUME doesn't exist"
 fi
 
 if [ "x" == "x${SILENT}" ]; then
