@@ -26,9 +26,9 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date -u +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=150526-084025
+SCRIPTVERSION=150527-012622
 
-SNAPLISTTMP=/tmp/zsnapple.txt
+SNAPLISTTMP=/tmp/zsnapple
 
 exiterror() {
     exitcode=$1
@@ -52,17 +52,23 @@ snapformat() {
 snappattern() {
     FORMAT="$1"
     case "${FORMAT}" in
-        short) echo "[0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9]" ;;
-        *) echo "GMT-[0-9][0-9][0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]-[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]" ;;
+        short) echo "@[0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9]" ;;
+        *) echo "@GMT-[0-9][0-9][0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]-[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]" ;;
     esac
 }
 
 generatesnapshots() {
-    zfs list -H -t snapshot -o name,creation -s creation | awk '{print $1}' | grep "${VOLUME}@" | grep "${SNAPPATTERN}" >${SNAPLISTTMP}
+    install -d -m 700 ${SNAPLISTTMP}
+
+    zfs list -H -t snapshot -o name,creation -s creation \
+        | awk '{print $1}' \
+        | grep "${VOLUME}@" \
+        | grep "${SNAPPATTERN}" \
+        >${SNAPLISTTMP}/${VOLUME}.${PREFIX}.${LIMIT}.${FORMAT}.${RECURSIVE}.txt
 }
 
 listsnapshots() {
-	cat ${SNAPLISTTMP}
+	cat ${SNAPLISTTMP}/${VOLUME}.${PREFIX}.${LIMIT}.${FORMAT}.${RECURSIVE}.txt
 }
 
 cleanupsnaps() {
