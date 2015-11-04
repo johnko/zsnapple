@@ -57,6 +57,7 @@ generatesnapshots() {
     install -d -m 700 ${SNAPLISTTMP}
 
     zfs list -H -t snapshot -o name -r ${VOLUME} \
+        | sort \
         | grep "${SNAPPATTERN}" \
         >${SNAPLISTTMP}/${SAFEVOLUME}.${PREFIX}.${LIMIT}.${SAFEFORMAT}.${RECURSIVE}.txt
 }
@@ -78,7 +79,7 @@ cleanupsnaps() {
     if [ "x" != "x${LIMIT}" ]; then
         SNAPPATTERN=`snappattern ${FORMAT}`
         generatesnapshots
-            COUNT=`listsnapshots | grep -o $(onlydatepart ${FORMAT}) | wc -l`
+            COUNT=`listsnapshots | grep -o $(onlydatepart ${FORMAT}) | sort -u | wc -l`
         TODESTROY=`listsnapshots | head -1`
         while [ ${COUNT} -gt ${LIMIT} ]; do
 
@@ -90,7 +91,7 @@ cleanupsnaps() {
             fi
 
             generatesnapshots
-                COUNT=`listsnapshots | grep -o $(onlydatepart ${FORMAT}) | wc -l`
+                COUNT=`listsnapshots | grep -o $(onlydatepart ${FORMAT}) | sort -u | wc -l`
             TODESTROY=`listsnapshots | head -1`
         done
     fi

@@ -57,6 +57,7 @@ generatesnapshots() {
     install -d -m 700 ${SNAPLISTTMP}
 
     zfs list -H -t snapshot -o name -r ${VOLUME} \
+        | sort \
         | grep "${SNAPPATTERN}" \
         >${SNAPLISTTMP}/${SAFEVOLUME}.${PREFIX}.${LIMIT}.${SAFEFORMAT}.${RECURSIVE}.txt
 }
