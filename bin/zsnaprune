@@ -48,8 +48,8 @@ snapformat() {
 snappattern() {
     FORMAT="$1"
     case "${FORMAT}" in
-        short) echo "@[0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9]" ;;
-        *) echo "@GMT-[0-9][0-9][0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]-[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]" ;;
+        short) echo "${PREFIX}@[0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9]" ;;
+        *) echo "@${PREFIX}GMT-[0-9][0-9][0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]-[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]" ;;
     esac
 }
 
@@ -78,13 +78,8 @@ cleanupsnaps() {
     if [ "x" != "x${LIMIT}" ]; then
         SNAPPATTERN=`snappattern ${FORMAT}`
         generatesnapshots
-        if [ "x" != "x${PREFIX}" ]; then
-                COUNT=`listsnapshots | grep -o $(onlydatepart ${FORMAT}) | wc -l`
-            TODESTROY=`listsnapshots | grep "${PREFIX}" | head -1`
-        else
-                COUNT=`listsnapshots | grep -o $(onlydatepart ${FORMAT}) | wc -l`
-            TODESTROY=`listsnapshots | head -1`
-        fi
+            COUNT=`listsnapshots | grep -o $(onlydatepart ${FORMAT}) | wc -l`
+        TODESTROY=`listsnapshots | head -1`
         while [ ${COUNT} -gt ${LIMIT} ]; do
 
             if [ "x" == "x${SILENT}" ]; then
@@ -95,13 +90,8 @@ cleanupsnaps() {
             fi
 
             generatesnapshots
-            if [ "x" != "x${PREFIX}" ]; then
-                    COUNT=`listsnapshots | grep -o $(onlydatepart ${FORMAT}) | wc -l`
-                TODESTROY=`listsnapshots | grep "${PREFIX}" | head -1`
-            else
-                    COUNT=`listsnapshots | grep -o $(onlydatepart ${FORMAT}) | wc -l`
-                TODESTROY=`listsnapshots | head -1`
-            fi
+                COUNT=`listsnapshots | grep -o $(onlydatepart ${FORMAT}) | wc -l`
+            TODESTROY=`listsnapshots | head -1`
         done
     fi
 }
