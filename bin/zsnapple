@@ -48,8 +48,8 @@ snapformat() {
 snappattern() {
     FORMAT="$1"
     case "${FORMAT}" in
-        short) echo "@[0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9]" ;;
-        *) echo "@GMT-[0-9][0-9][0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]-[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]" ;;
+        short) echo "${VOLUME}@${PREFIX}[0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9]" ;;
+        *) echo "${VOLUME}@${PREFIX}GMT-[0-9][0-9][0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]-[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]" ;;
     esac
 }
 
@@ -70,25 +70,15 @@ cleanupsnaps() {
     if [ "x" != "x${LIMIT}" ]; then
         SNAPPATTERN=`snappattern ${FORMAT}`
         generatesnapshots
-        if [ "x" != "x${PREFIX}" ]; then
-                COUNT=`listsnapshots | grep "${PREFIX}" | wc -l`
-            TODESTROY=`listsnapshots | grep "${PREFIX}" | head -1`
-        else
-                COUNT=`listsnapshots | wc -l`
-            TODESTROY=`listsnapshots | head -1`
-        fi
+            COUNT=`listsnapshots | wc -l`
+        TODESTROY=`listsnapshots | head -1`
         while [ ${COUNT} -gt ${LIMIT} ]; do
 
             zfs destroy ${RECURSIVE} ${TODESTROY}
 
             generatesnapshots
-            if [ "x" != "x${PREFIX}" ]; then
-                    COUNT=`listsnapshots | grep "${PREFIX}" | wc -l`
-                TODESTROY=`listsnapshots | grep "${PREFIX}" | head -1`
-            else
-                    COUNT=`listsnapshots | wc -l`
-                TODESTROY=`listsnapshots | head -1`
-            fi
+                COUNT=`listsnapshots | wc -l`
+            TODESTROY=`listsnapshots | head -1`
         done
     fi
 }
