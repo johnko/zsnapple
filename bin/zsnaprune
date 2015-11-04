@@ -68,8 +68,8 @@ listsnapshots() {
 onlydatepart() {
     FORMAT="$1"
     case "${FORMAT}" in
-        short) echo "@[0-9][0-9][0-9][0-9][0-9][0-9]" ;;
-        *) echo "@GMT-[0-9][0-9][0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]" ;;
+        short) echo "@${PREFIX}[0-9][0-9][0-9][0-9][0-9][0-9]" ;;
+        *) echo "@${PREFIX}GMT-[0-9][0-9][0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]" ;;
     esac
 }
 
@@ -79,7 +79,7 @@ cleanupsnaps() {
         SNAPPATTERN=`snappattern ${FORMAT}`
         generatesnapshots
         if [ "x" != "x${PREFIX}" ]; then
-                COUNT=`listsnapshots | grep -o ${PREFIX}$(onlydatepart ${FORMAT}) | wc -l`
+                COUNT=`listsnapshots | grep -o $(onlydatepart ${FORMAT}) | wc -l`
             TODESTROY=`listsnapshots | grep "${PREFIX}" | head -1`
         else
                 COUNT=`listsnapshots | grep -o $(onlydatepart ${FORMAT}) | wc -l`
@@ -96,7 +96,7 @@ cleanupsnaps() {
 
             generatesnapshots
             if [ "x" != "x${PREFIX}" ]; then
-                    COUNT=`listsnapshots | grep -o ${PREFIX}$(onlydatepart ${FORMAT}) | wc -l`
+                    COUNT=`listsnapshots | grep -o $(onlydatepart ${FORMAT}) | wc -l`
                 TODESTROY=`listsnapshots | grep "${PREFIX}" | head -1`
             else
                     COUNT=`listsnapshots | grep -o $(onlydatepart ${FORMAT}) | wc -l`
