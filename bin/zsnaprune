@@ -79,7 +79,7 @@ cleanupsnaps() {
         SNAPPATTERN=`snappattern ${FORMAT}`
         generatesnapshots
         if [ "x" != "x${PREFIX}" ]; then
-                COUNT=`listsnapshots | grep "${PREFIX}" | grep -o $(onlydatepart ${FORMAT}) | wc -l`
+                COUNT=`listsnapshots | grep -o ${PREFIX}$(onlydatepart ${FORMAT}) | wc -l`
             TODESTROY=`listsnapshots | grep "${PREFIX}" | head -1`
         else
                 COUNT=`listsnapshots | grep -o $(onlydatepart ${FORMAT}) | wc -l`
@@ -96,7 +96,7 @@ cleanupsnaps() {
 
             generatesnapshots
             if [ "x" != "x${PREFIX}" ]; then
-                    COUNT=`listsnapshots | grep "${PREFIX}" | grep -o $(onlydatepart ${FORMAT}) | wc -l`
+                    COUNT=`listsnapshots | grep -o ${PREFIX}$(onlydatepart ${FORMAT}) | wc -l`
                 TODESTROY=`listsnapshots | grep "${PREFIX}" | head -1`
             else
                     COUNT=`listsnapshots | grep -o $(onlydatepart ${FORMAT}) | wc -l`
