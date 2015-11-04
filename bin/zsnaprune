@@ -87,7 +87,12 @@ cleanupsnaps() {
         fi
         while [ ${COUNT} -gt ${LIMIT} ]; do
 
-            echo "WOULD: zfs destroy ${RECURSIVE} ${TODESTROY}"
+            if [ "x" == "x${SILENT}" ]; then
+                echo "zfs destroy ${RECURSIVE} ${TODESTROY}"
+                      zfs destroy ${RECURSIVE} ${TODESTROY}
+            else
+                      zfs destroy ${RECURSIVE} ${TODESTROY} >/dev/null 2>&1
+            fi
 
             generatesnapshots
             if [ "x" != "x${PREFIX}" ]; then
