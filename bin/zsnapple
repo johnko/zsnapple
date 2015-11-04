@@ -23,10 +23,6 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
-######################################################################
-# Script version is yymmdd-HHMMSS in UTC, date -u +%y%m%d-%H%M%S
-######################################################################
-SCRIPTVERSION=150527-023436
 
 SNAPLISTTMP=/tmp/zsnapple
 
@@ -60,9 +56,7 @@ snappattern() {
 generatesnapshots() {
     install -d -m 700 ${SNAPLISTTMP}
 
-    zfs list -H -t snapshot -o name,creation -s creation \
-        | awk '{print $1}' \
-        | grep "^${VOLUME}@" \
+    zfs list -H -t snapshot -o name -r ${VOLUME} \
         | grep "${SNAPPATTERN}" \
         >${SNAPLISTTMP}/${SAFEVOLUME}.${PREFIX}.${LIMIT}.${SAFEFORMAT}.${RECURSIVE}.txt
 }
