@@ -81,7 +81,7 @@ cleanupsnaps() {
 
             zfs destroy ${RECURSIVE} ${TODESTROY}
 
-			generatesnapshots
+            generatesnapshots
             if [ "x" != "x${PREFIX}" ]; then
                     COUNT=`listsnapshots | grep "${PREFIX}" | wc -l`
                 TODESTROY=`listsnapshots | grep "${PREFIX}" | head -1`
