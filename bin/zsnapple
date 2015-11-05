@@ -24,7 +24,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-SNAPLISTTMP=/tmp/zsnapple
+SNAPLISTTMP=/tmp/`whoami`/zsnapple
 
 exiterror() {
     exitcode=$1
