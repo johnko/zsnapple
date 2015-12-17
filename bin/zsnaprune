@@ -24,7 +24,7 @@ snapformat() {
 snappattern() {
     FORMAT="$1"
     case "${FORMAT}" in
-        short) echo "${VOLUME}@${PREFIX}[0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9]" ;;
+        short) echo "${VOLUME}@${PREFIX}([0-9][0-9][0-9][0-9]|[0-9][0-9])[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9]" ;;
         *) echo "${VOLUME}@${PREFIX}GMT-[0-9][0-9][0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]-[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]" ;;
     esac
 }
@@ -34,7 +34,7 @@ generatesnapshots() {
 
     zfs list -H -t snapshot -o name -r ${VOLUME} \
         | sort \
-        | grep "${SNAPPATTERN}" \
+        | egrep "${SNAPPATTERN}" \
         >${SNAPLISTTMP}/${SAFEVOLUME}.${PREFIX}.${LIMIT}.${SAFEFORMAT}.${RECURSIVE}.txt
 }
 
@@ -45,7 +45,7 @@ listsnapshots() {
 onlydatepart() {
     FORMAT="$1"
     case "${FORMAT}" in
-        short) echo "${VOLUME}@${PREFIX}[0-9][0-9][0-9][0-9][0-9][0-9]" ;;
+        short) echo "${VOLUME}@${PREFIX}([0-9][0-9][0-9][0-9]|[0-9][0-9])[0-9][0-9][0-9][0-9]" ;;
         *) echo "${VOLUME}@${PREFIX}GMT-[0-9][0-9][0-9][0-9]\.[0-9][0-9]\.[0-9][0-9]" ;;
     esac
 }
@@ -55,7 +55,7 @@ cleanupsnaps() {
     if [ "x" != "x${LIMIT}" ]; then
         SNAPPATTERN=`snappattern ${FORMAT}`
         generatesnapshots
-            COUNT=`listsnapshots | grep -o $(onlydatepart ${FORMAT}) | sort -u | wc -l`
+            COUNT=`listsnapshots | egrep -o $(onlydatepart ${FORMAT}) | sort -u | wc -l`
         TODESTROY=`listsnapshots | head -1`
         while [ ${COUNT} -gt ${LIMIT} ]; do
 
@@ -67,7 +67,7 @@ cleanupsnaps() {
             fi
 
             generatesnapshots
-                COUNT=`listsnapshots | grep -o $(onlydatepart ${FORMAT}) | sort -u | wc -l`
+                COUNT=`listsnapshots | egrep -o $(onlydatepart ${FORMAT}) | sort -u | wc -l`
             TODESTROY=`listsnapshots | head -1`
         done
     fi
