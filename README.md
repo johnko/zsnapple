@@ -33,7 +33,7 @@ PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin:/root/bin
 0 * * * * zsnapple -f shadow -l 24 -r -v tank/smb -p hourly -q
 ```
 
-### Prune dailies by date, not just by count
+### Prune dailies by date assuming snapshot names are dates, not just by count
 
 ```
           zsnaprune -f short -l 120 -v tank/urep/backup -q

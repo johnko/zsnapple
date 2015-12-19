@@ -11,16 +11,6 @@ exiterror() {
     exit ${exitcode}
 }
 
-snapformat() {
-    FORMAT="$1"
-    case "${FORMAT}" in
-        # short format 2 digit for everything in UTC
-        short) date -u +%y%m%d-%H%M%S ;;
-        # https://www.samba.org/samba/docs/man/manpages/vfs_shadow_copy2.8.html
-        *) TZ=GMT date +GMT-%Y.%m.%d-%H.%M.%S ;;
-    esac
-}
-
 snappattern() {
     FORMAT="$1"
     case "${FORMAT}" in
@@ -101,7 +91,6 @@ done
 
 LIMIT=`echo ${LIMIT} | tr -cd '0-9'`
 PREFIX=`echo ${PREFIX} | tr -cd '[:alnum:]._-'`
-SNAPNAME=`snapformat ${FORMAT}`
 SAFEVOLUME=`echo ${VOLUME} | tr -cd '[:alnum:]._-'`
 SAFEFORMAT=`echo ${FORMAT} | tr -cd '[:alnum:]._-'`
 
